@@ -84,7 +84,7 @@ func (s *Service) Pay(accountID int64, amount types.Money, category types.Paymen
 		AccountID: accountID,
 		Amount:    amount,
 		Category:  category,
-		Status:    types.StatusInProgress,
+		Status:    types.PaymentStatusInProgress,
 	}
 
 	s.payments = append(s.payments, payment)
@@ -133,7 +133,7 @@ func (s *Service) Reject(paymentID string) error  {
 	if payment == nil {
 		return  ErrPaymentNotFound
 	}
-	payment.Status=types.StatusFail
+	payment.Status=types.PaymentStatusFail
 	acc,err:=s.FindAccountByID(payment.AccountID)
 	if err != nil {
 		return nil 
