@@ -13,13 +13,31 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(account)
+	err = svc.Deposit(account.ID, 9)
+	if err != nil {
+		switch err {
+		case wallet.ErrAmmountMustBePositive:
+			fmt.Println("Сумма должна быть позитив")
+		case wallet.ErrAccountNotFound:
+			fmt.Println("Аккаунт не найден")
+		}
+		return
+	}
 
-	account11, err:=svc.FindAccountByID(account.ID)
+	fmt.Println("Баланс после поплнения: ", account.Balance)
+
+	pay, err := svc.Pay(account.ID, 1, "auto")
+	fmt.Println(pay)
+	fmt.Println("Баланс после снятия 1: ", account.Balance)
+
+	err = svc.Reject(pay.ID)
+	fmt.Println(pay)
+	fmt.Println("Баланс после отмены 1: ",account.Balance)
+	pp,err:=svc.FindPaymentByID(pay.ID)
 	if err != nil {
 		return 
 	}
 
-	fmt.Println(account11)
+	fmt.Println(pp)
 
 }
