@@ -33,10 +33,10 @@ func TestService_FindAccountByID_notFound(t *testing.T) {
 		return
 	}
 
-	account11, err := svc.FindAccountByID(account.ID+1)
+	account0, err := svc.FindAccountByID(account.ID+1)
 	if err != nil {
-		if account != account11 {
-			t.Error(err)
+		if err != ErrAccountNotFound {
+			t.Error(account0)
 		}
 
 	}
