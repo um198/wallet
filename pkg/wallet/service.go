@@ -133,7 +133,9 @@ func (s *Service) Pay(accountID int64, amount types.Money, category types.Paymen
 
 }
 
+
 func (s *Service) Repeat(paymentID string) (*types.Payment, error)  {
+	
 	payment,err:=s.FindPaymentByID(paymentID)
 	if err != nil {
 		return nil, err
