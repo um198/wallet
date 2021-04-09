@@ -1,4 +1,4 @@
-gspackage wallet
+package wallet
 
 import (
 	"fmt"
