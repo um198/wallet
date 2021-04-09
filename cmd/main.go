@@ -13,7 +13,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	err = svc.Deposit(account.ID, 9)
+	err = svc.Deposit(account.ID, 90)
 	if err != nil {
 		switch err {
 		case wallet.ErrAmmountMustBePositive:
@@ -24,20 +24,24 @@ func main() {
 		return
 	}
 
-	fmt.Println("Баланс после поплнения: ", account.Balance)
+	fmt.Println("Баланс: ", account.Balance)
 
-	pay, err := svc.Pay(account.ID, 1, "auto")
+	pay, err := svc.Pay(account.ID, 10, "auto")
+	if err != nil {
+		fmt.Println(wallet.ErrNotEnoughBalance)
+		return 
+	}
 	fmt.Println(pay)
 	fmt.Println("Баланс после снятия 1: ", account.Balance)
 
-	err = svc.Reject(pay.ID)
-	fmt.Println(pay)
-	fmt.Println("Баланс после отмены 1: ",account.Balance)
-	pp,err:=svc.FindPaymentByID(pay.ID)
-	if err != nil {
-		return 
-	}
+	 repp, err:=svc.Repeat(pay.ID)
+	 fmt.Println(repp)
+	fmt.Println("Баланс после повтора снятия 1: ",account.Balance)
+	// pp,err:=svc.FindPaymentByID(pay.ID)
+	// if err != nil {
+	// 	return 
+	// }
 
-	fmt.Println(pp)
+	// fmt.Println(pp)
 
 }
