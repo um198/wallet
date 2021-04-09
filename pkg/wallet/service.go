@@ -132,15 +132,8 @@ func (s *Service) Pay(accountID int64, amount types.Money, category types.Paymen
 
 }
 
-<<<<<<< HEAD
 func (s *Service) Repeat(paymentID string) (*types.Payment, error) {
 	payment, err := s.FindPaymentByID(paymentID)
-=======
-
-func (s *Service) Repeat(paymentID string) (*types.Payment, error)  {
-	
-	payment,err:=s.FindPaymentByID(paymentID)
->>>>>>> master
 	if err != nil {
 		return nil, err
 	}
@@ -162,7 +155,6 @@ func (s *Service) Repeat(paymentID string) (*types.Payment, error)  {
 	acc.Balance -= payment.Amount
 
 	s.payments = append(s.payments, newPayment)
-<<<<<<< HEAD
 	return newPayment, nil
 
 }
@@ -185,9 +177,6 @@ func (s *Service) FavoritePayment(paymentID string, name string) (*types.Favorit
 	s.favorites = append(s.favorites, newFavorite)
 
 	return newFavorite, nil
-=======
-	return newPayment, nil	
->>>>>>> master
 }
 
 

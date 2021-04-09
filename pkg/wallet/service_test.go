@@ -1,4 +1,4 @@
-package wallet
+gspackage wallet
 
 import (
 	"fmt"
@@ -173,7 +173,6 @@ func TestService_Repeat_sucsses(t *testing.T) {
 	savedAccount, err:=s.FindAccountByID(payment.AccountID)
 	if err != nil {
 		t.Errorf("Repeat(): can not find account by id, error = %v", err)
-<<<<<<< HEAD
 		return
 	}
 	if savedAccount.Balance==defaultTestAccount.balance{
@@ -227,12 +226,6 @@ func TestService_PayFromFavorite_sucsses(t *testing.T) {
 	}
 	if savedAccount.Balance==defaultTestAccount.balance{
 		t.Errorf("PayFromFavorite(): balance did not changed, old = %v, new = %v", defaultTestAccount.balance,savedAccount.Balance)
-=======
-		return
-	}
-	if savedAccount.Balance==defaultTestAccount.balance{
-		t.Errorf("Repeat(): balance did not changed, error = %v", err)
->>>>>>> master
 		return
 	}
 
