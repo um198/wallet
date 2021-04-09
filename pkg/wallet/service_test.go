@@ -78,21 +78,17 @@ func (s *testService) addAccountWithBalance(phone types.Phone, balance types.Mon
 
 func TestService_FindAccountByID_found(t *testing.T) {
 	s := newTestService()
-
 	_,payments, err:=s.addAccount(defaultTestAccount)
 	if err != nil {
 		t.Error(err)
 		return
 	}
-
 	payment:=payments[0]
 	got, err := s.FindPaymentByID(payment.ID)
-
 	if err != nil {
 		t.Errorf("FindAccountByID(): error = %v", err)
 		return
 	}
-
 	if !reflect.DeepEqual(payment, got) {
 		t.Errorf("FindAccountByID(): wrong payment returned = %v", err)
 		return
@@ -127,7 +123,6 @@ func TestService_Reject_ok(t *testing.T) {
 		t.Error(err)
 		return 
 	}
-
 	payment:=payments[0]
 	err = s.Reject(payment.ID)
 	if err != nil {
@@ -178,6 +173,7 @@ func TestService_Repeat_sucsses(t *testing.T) {
 	savedAccount, err:=s.FindAccountByID(payment.AccountID)
 	if err != nil {
 		t.Errorf("Repeat(): can not find account by id, error = %v", err)
+<<<<<<< HEAD
 		return
 	}
 	if savedAccount.Balance==defaultTestAccount.balance{
@@ -231,6 +227,12 @@ func TestService_PayFromFavorite_sucsses(t *testing.T) {
 	}
 	if savedAccount.Balance==defaultTestAccount.balance{
 		t.Errorf("PayFromFavorite(): balance did not changed, old = %v, new = %v", defaultTestAccount.balance,savedAccount.Balance)
+=======
+		return
+	}
+	if savedAccount.Balance==defaultTestAccount.balance{
+		t.Errorf("Repeat(): balance did not changed, error = %v", err)
+>>>>>>> master
 		return
 	}
 
