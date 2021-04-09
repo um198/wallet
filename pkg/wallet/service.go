@@ -141,9 +141,9 @@ func (s *Service) Repeat(paymentID string) (*types.Payment, error)  {
 		return nil, err
 	}
 
-	PaymntID := uuid.New().String()
+	newPaymntID := uuid.New().String()
 	newPayment := &types.Payment{
-		ID:        PaymntID,
+		ID:        newPaymntID,
 		AccountID: payment.AccountID,
 		Amount:    payment.Amount,
 		Category:  payment.Category,
@@ -157,10 +157,8 @@ func (s *Service) Repeat(paymentID string) (*types.Payment, error)  {
 
 	acc.Balance-=payment.Amount
 
-	s.payments = append(s.payments, payment)
+	s.payments = append(s.payments, newPayment)
 	return newPayment, nil	
-
-
 }
 
 

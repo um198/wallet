@@ -26,22 +26,24 @@ func main() {
 
 	fmt.Println("Баланс: ", account.Balance)
 
-	pay, err := svc.Pay(account.ID, 10, "auto")
+	pay, err := svc.Pay(account.ID, 22, "auto")
 	if err != nil {
 		fmt.Println(wallet.ErrNotEnoughBalance)
-		return 
+		return
 	}
 	fmt.Println(pay)
 	fmt.Println("Баланс после снятия 1: ", account.Balance)
 
-	 repp, err:=svc.Repeat(pay.ID)
-	 fmt.Println(repp)
-	fmt.Println("Баланс после повтора снятия 1: ",account.Balance)
-	// pp,err:=svc.FindPaymentByID(pay.ID)
-	// if err != nil {
-	// 	return 
-	// }
+	repp, err := svc.Repeat(pay.ID)
+	fmt.Println(repp)
+	fmt.Println("Баланс после повтора снятия 1: ", account.Balance)
+	
+	pp,err:=svc.FindPaymentByID(repp.ID)
+	if err != nil {
+		fmt.Println(err, repp.ID)
+		return
+	}
 
-	// fmt.Println(pp)
+	fmt.Println("mkmokm     ",pp)
 
 }
