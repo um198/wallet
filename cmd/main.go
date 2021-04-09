@@ -7,13 +7,13 @@ import (
 )
 
 func main() {
-	svc := &wallet.Service{}
-	account, err := svc.RegisterAccount("+992000000007")
+	s := &wallet.Service{}
+	account, err := s.RegisterAccount("+992000000007")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	err = svc.Deposit(account.ID, 90)
+	err = s.Deposit(account.ID, 90)
 	if err != nil {
 		switch err {
 		case wallet.ErrAmmountMustBePositive:
@@ -26,22 +26,41 @@ func main() {
 
 	fmt.Println("Баланс: ", account.Balance)
 
-	pay, err := svc.Pay(account.ID, 10, "auto")
+	pay, err := s.Pay(account.ID, 10, "auto")
 	if err != nil {
 		fmt.Println(wallet.ErrNotEnoughBalance)
-		return 
+		return
 	}
 	fmt.Println(pay)
 	fmt.Println("Баланс после снятия 1: ", account.Balance)
 
-	 repp, err:=svc.Repeat(pay.ID)
-	 fmt.Println(repp)
-	fmt.Println("Баланс после повтора снятия 1: ",account.Balance)
-	// pp,err:=svc.FindPaymentByID(pay.ID)
-	// if err != nil {
-	// 	return 
-	// }
+	repp, err := s.Repeat(pay.ID)
+	fmt.Println(repp)
+	fmt.Println("Баланс после повтора снятия 1: ", account.Balance)
+	pp, err := s.FindPaymentByID(repp.ID)
+	if err != nil {
+		return
+	}
 
-	// fmt.Println(pp)
+	fmt.Println(pp)
+
+	fav, err:=s.FavoritePayment(pp.ID, "myFv")
+	if err != nil {
+		fmt.Println(err)
+		return 
+	}
+	fmt.Println(fav)
+
+	pFav,err:=s.PayFromFavorite(fav.ID)
+	if err != nil {
+		fmt.Println(err)
+		return 
+	}
+
+	fmt.Println(pFav)
+
+	fmt.Println("Баланс после платежа из избранных: ", account.Balance)
+
+
 
 }

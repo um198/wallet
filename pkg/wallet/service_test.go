@@ -164,25 +164,77 @@ func TestService_Repeat_sucsses(t *testing.T) {
 	payment:=payments[0]
 	_,err = s.Repeat(payment.ID)
 	if err != nil {
-		t.Errorf("Reject(): error = %v", err)
+		t.Errorf("Repeat(): error = %v", err)
 		return
 	}
 	savedPayment, err:=s.FindPaymentByID(payment.ID)
 	if err != nil {
-		t.Errorf("Reject(): can not find payment by id, error = %v", err)
+		t.Errorf("Repeat(): can not find payment by id, error = %v", err)
 		return
 	}
 	if savedPayment.Status!=types.PaymentStatusInProgress{
-		t.Errorf("Reject(): status did not changed, error = %v", err)
+		t.Errorf("Repeat(): status did not changed, error = %v", err)
 	}
 	savedAccount, err:=s.FindAccountByID(payment.AccountID)
 	if err != nil {
-		t.Errorf("Reject(): can not find account by id, error = %v", err)
+		t.Errorf("Repeat(): can not find account by id, error = %v", err)
 		return
 	}
 	if savedAccount.Balance==defaultTestAccount.balance{
-		t.Errorf("Reject(): balance did not changed, error = %v", err)
+		t.Errorf("Repeat(): balance did not changed, error = %v", err)
 		return
 	}
 }
+
+
+func TestService_FavoritePayment_sucsses(t *testing.T) {
+	s := newTestService()
+	_,payments,err:=s.addAccount(defaultTestAccount)
+	if err != nil {
+		t.Error(err)
+		return 
+	}
+
+	payment:=payments[0]
+	_, err=s.FavoritePayment(payment.ID,"auto")
+	if err != nil {
+		t.Errorf("PayFromFavorite(): can not add favorite, error = %v", err)
+		return 
+	}
+}
+
+func TestService_PayFromFavorite_sucsses(t *testing.T) {
+	s := newTestService()
+	_,payments,err:=s.addAccount(defaultTestAccount)
+	if err != nil {
+		t.Error(err)
+		return 
+	}
+
+	payment:=payments[0]
+	fv, err:=s.FavoritePayment(payment.ID,"auto")
+	if err != nil {
+		t.Errorf("PayFromFavorite(): can not add favorite, error = %v", err)
+		return 
+	}
+
+	_,err=s.PayFromFavorite(fv.ID)
+	if err != nil {
+		t.Errorf("PayFromFavorite(): can not find favorite, error = %v", err)
+		return 
+	}
+
+	savedAccount, err:=s.FindAccountByID(payment.AccountID)
+	if err != nil {
+		t.Errorf("PayFromFavorite(): can not find account by id, error = %v", err)
+		return
+	}
+	if savedAccount.Balance==defaultTestAccount.balance{
+		t.Errorf("PayFromFavorite(): balance did not changed, old = %v, new = %v", defaultTestAccount.balance,savedAccount.Balance)
+		return
+	}
+
+}
+
+
 
