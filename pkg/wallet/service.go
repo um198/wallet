@@ -216,9 +216,9 @@ func (s *Service) ExportToFile(path string) error {
 	for _, account := range s.accounts {
 		_, err = file.Write([]byte(strconv.FormatInt(account.ID, 10)))
 		_, err = file.Write([]byte(";"))
-		_, err = file.Write([]byte(strconv.FormatInt(int64(account.Balance), 10)))
-		_, err = file.Write([]byte(";"))
 		_, err = file.Write([]byte(account.Phone))
+		_, err = file.Write([]byte(";"))
+		_, err = file.Write([]byte(strconv.FormatInt(int64(account.Balance), 10)))
 		_, err = file.Write([]byte("|"))
 		if err != nil {
 			log.Print(err)
