@@ -44,23 +44,43 @@ func main() {
 
 	fmt.Println(pp)
 
-	fav, err:=s.FavoritePayment(pp.ID, "myFv")
+	fav, err := s.FavoritePayment(pp.ID, "myFv")
 	if err != nil {
 		fmt.Println(err)
-		return 
+		return
 	}
-	fmt.Println(fav)
+	fmt.Println("FavoritePayment:= ", fav)
 
-	pFav,err:=s.PayFromFavorite(fav.ID)
+	favorite, err := s.FindFavoriteByID(fav.ID)
 	if err != nil {
 		fmt.Println(err)
-		return 
+		return
 	}
 
-	fmt.Println(pFav)
+	fmt.Println("FindFavoriteByID:= ", favorite)
+
+	pFav, err := s.PayFromFavorite(fav.ID)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("PayFromFavorite:= ", pFav)
 
 	fmt.Println("Баланс после платежа из избранных: ", account.Balance)
+	
+	_, err = s.RegisterAccount("+992000000008")
+	_, err = s.RegisterAccount("+992000000009")
+	_, err = s.RegisterAccount("+992000000010")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
-
+	err = s.ExportToFile("acc.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 }
