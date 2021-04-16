@@ -2,12 +2,13 @@ package wallet
 
 import (
 	"errors"
+	"github.com/google/uuid"
+	"github.com/um198/wallet/pkg/types"
+	"io"
 	"log"
 	"os"
 	"strconv"
-
-	"github.com/google/uuid"
-	"github.com/um198/wallet/pkg/types"
+	"strings"
 )
 
 var ErrPhoneRegistered = errors.New("phone alredy registered")
@@ -212,19 +213,69 @@ func (s *Service) ExportToFile(path string) error {
 			log.Print(cerr)
 		}
 	}()
-
+	result := ""
 	for _, account := range s.accounts {
-		_, err = file.Write([]byte(strconv.FormatInt(account.ID, 10)))
-		_, err = file.Write([]byte(";"))
-		_, err = file.Write([]byte(account.Phone))
-		_, err = file.Write([]byte(";"))
-		_, err = file.Write([]byte(strconv.FormatInt(int64(account.Balance), 10)))
-		_, err = file.Write([]byte("|"))
+		result = result + strconv.FormatInt(account.ID, 10) + ";" +
+			string(account.Phone) + ";" + strconv.FormatInt(int64(account.Balance), 10) + "|"
+	}
+
+	_, err = file.Write([]byte(result))
+	if err != nil {
+		log.Print(err)
+		return err
+	}
+
+	return err
+}
+
+func (s *Service) ImportFromFile(path string) error {
+	file, err := os.Open(path)
+	if err != nil {
+		log.Print(err)
+		return err
+	}
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			log.Print(err)
+		}
+	}()
+
+	buf := make([]byte, 4)
+	content := make([]byte, 0)
+	for {
+		read, err := file.Read(buf)
+		if err == io.EOF {
+			content = append(content, buf[:read]...)
+			break
+		}
 		if err != nil {
 			log.Print(err)
 			return err
 		}
+		content = append(content, buf[:read]...)
+	}
+	data := strings.Split(string(content), "|")
 
+	for _, acc := range data {
+		account := (strings.Split(acc, ";"))
+		if len(account) > 1 {
+			// log.Print(len(account))
+			id, err := strconv.ParseInt(account[0], 10, 64)
+			if err != nil {
+				return err
+			}
+			balance, err := strconv.ParseInt(account[2], 10, 64)
+			if err != nil {
+				return err
+			}
+			account := &types.Account{
+				ID:      id,
+				Phone:   types.Phone(account[1]),
+				Balance: types.Money(balance),
+			}
+			s.accounts = append(s.accounts, account)
+		}
 	}
 
 	return err

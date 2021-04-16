@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -15,7 +16,7 @@ func main() {
 
 	log.Print(wd)
 
-	file, err := os.Open("data/readme.txt")
+	file, err := os.Open("data/acc.txt")
 	if err != nil {
 		log.Print(err)
 		return
@@ -27,7 +28,7 @@ func main() {
 		}
 	}()
 
-	log.Printf("%#v", file)
+	// log.Printf("%#v", file)
 
 	buf := make([]byte, 4)
 	content := make([]byte, 0)
@@ -45,27 +46,33 @@ func main() {
 		content = append(content, buf[:read]...)
 
 	}
-	data := string(content)
-	log.Print(data)
-
-	file2, err := os.Create("data/message.txt")
-	if err != nil {
-		log.Print(err)
-		return
-	}
-
-	defer func() {
-		if cerr := file2.Close(); cerr != nil {
-			log.Print(cerr)
+	data := strings.Split(string(content),"|") 
+	for _, acc := range data {
+		account:=(strings.Split(acc,";"))
+		if len(account)>1 {
+			log.Print(len(account))
 		}
-	}()
-
-	_, err = file2.Write([]byte("Hello from GO!"))
-	if err != nil {
-		log.Print(err)
-		return
 	}
-	log.Print()
+
+
+	// file2, err := os.Create("data/message.txt")
+	// if err != nil {
+	// 	log.Print(err)
+	// 	return
+	// }
+
+	// defer func() {
+	// 	if cerr := file2.Close(); cerr != nil {
+	// 		log.Print(cerr)
+	// 	}
+	// }()
+
+	// _, err = file2.Write([]byte("Hello from GO!"))
+	// if err != nil {
+	// 	log.Print(err)
+	// 	return
+	// }
+	// log.Print()
 }
 
 func closeF(file *os.File) {

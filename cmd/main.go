@@ -68,7 +68,7 @@ func main() {
 	fmt.Println("PayFromFavorite:= ", pFav)
 
 	fmt.Println("Баланс после платежа из избранных: ", account.Balance)
-	
+
 	_, err = s.RegisterAccount("+992000000008")
 	_, err = s.RegisterAccount("+992000000009")
 	_, err = s.RegisterAccount("+992000000010")
@@ -82,5 +82,8 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+
+	// s.ImportFromFile("acc.txt")
+	
 
 }
