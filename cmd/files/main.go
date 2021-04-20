@@ -16,7 +16,7 @@ func main() {
 
 	log.Print(wd)
 
-	file, err := os.Open("data/acc.txt")
+	file, err := os.Open("../../acc.txt")
 	if err != nil {
 		log.Print(err)
 		return
@@ -50,7 +50,7 @@ func main() {
 	for _, acc := range data {
 		account:=(strings.Split(acc,";"))
 		if len(account)>1 {
-			log.Print(len(account))
+			log.Print((account))
 		}
 	}
 
